@@ -24,8 +24,8 @@ object FactionsAlphaProvider {
                 ),
                 Env.getString("databases.postgresql.user"),
                 Env.getString("databases.postgresql.password"),
-                Env.getString("databases.postgresql.database"),
-                Env.getString("databases.postgresql.schema")
+                Env.getString("databases.postgresql.factions_database"),
+                Env.getString("databases.factions_alpha")
             )
 
         }
