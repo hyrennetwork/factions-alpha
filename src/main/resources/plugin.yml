@@ -1,0 +1,6 @@
+name: Factions-Alpha
+main: net.hyren.factions.alpha.FactionsAlphaPlugin
+version: 0.1-ALPHA
+author: Gutyerrez
+depend:
+  - Core

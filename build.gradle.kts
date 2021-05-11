@@ -1,0 +1,61 @@
+plugins {
+    kotlin("jvm") version "1.5.0"
+
+    id("com.github.johnrengelman.shadow") version "6.1.0"
+
+    `maven-publish`
+}
+
+group = "net.hyren"
+version = "0.1-ALPHA"
+
+repositories {
+    mavenCentral()
+
+    jcenter()
+
+    maven("https://maven.pkg.github.com/hyrendev/nexus/") {
+        credentials {
+            username = System.getenv("MAVEN_USERNAME")
+            password = System.getenv("MAVEN_PASSWORD")
+        }
+    }
+}
+
+dependencies {
+    // kotlin
+    compileOnly(kotlin("stdlib"))
+
+    // paperspigot
+    compileOnly("org.github.paperspigot:paperspigot:1.8.8-R0.1-SNAPSHOT")
+
+    // core
+    compileOnly("net.hyren:core-shared:0.1-ALPHA")
+    compileOnly("net.hyren:core-spigot:0.1-ALPHA")
+}
+
+val sources by tasks.registering(Jar::class) {
+    archiveFileName.set(project.name)
+    archiveClassifier.set("sources")
+    archiveVersion.set(null as String?)
+
+    from(sourceSets.main.get().allSource)
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            repositories {
+                maven("https://maven.pkg.github.com/hyrendev/nexus/") {
+                    credentials {
+                        username = System.getenv("MAVEN_USERNAME")
+                        password = System.getenv("MAVEN_PASSWORD")
+                    }
+                }
+            }
+
+            from(components["kotlin"])
+            artifact(sources.get())
+        }
+    }
+}
