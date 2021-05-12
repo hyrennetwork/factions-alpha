@@ -1,7 +1,7 @@
 package net.hyren.factions.alpha
 
 import net.hyren.core.shared.environment.Env
-import net.hyren.core.shared.providers.databases.postgres.PostgresDatabaseProvider
+import net.hyren.core.shared.providers.databases.mariadb.MariaDBDatabaseProvider
 import java.net.InetSocketAddress
 
 /**
@@ -10,14 +10,14 @@ import java.net.InetSocketAddress
 object FactionsAlphaProvider {
 
     fun prepare() {
-        Databases.Postgres.FACTIONS_ALPHA_POSTGRES.prepare()
+        Databases.MariaDB.MARIA_DB_FACTIONS_ALPHA.prepare()
     }
 
     object Databases {
 
-        object Postgres {
+        object MariaDB {
 
-            val FACTIONS_ALPHA_POSTGRES = PostgresDatabaseProvider(
+            val MARIA_DB_FACTIONS_ALPHA = MariaDBDatabaseProvider(
                 InetSocketAddress(
                     Env.getString("databases.postgresql.host"),
                     Env.getInt("databases.postgresql.port")
