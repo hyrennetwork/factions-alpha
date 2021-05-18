@@ -10,14 +10,14 @@ import java.net.InetSocketAddress
 object FactionsAlphaProvider {
 
     fun prepare() {
-        Databases.MariaDB.MARIA_DB_FACTIONS_ALPHA.prepare()
+        Databases.PostgreSQL.POSTGRESQL_FACTIONS_ALPHA.prepare()
     }
 
     object Databases {
 
-        object MariaDB {
+        object PostgreSQL {
 
-            val MARIA_DB_FACTIONS_ALPHA = MariaDBDatabaseProvider(
+            val POSTGRESQL_FACTIONS_ALPHA = MariaDBDatabaseProvider(
                 InetSocketAddress(
                     Env.getString("databases.postgresql.host"),
                     Env.getInt("databases.postgresql.port")
