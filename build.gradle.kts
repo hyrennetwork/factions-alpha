@@ -34,6 +34,18 @@ dependencies {
     compileOnly("net.hyren:core-spigot:0.1-ALPHA")
 }
 
+tasks {
+    compileKotlin {
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
+    }
+
+    shadowJar {
+        archiveFileName.set("${project.name}.jar")
+    }
+}
+
 val sources by tasks.registering(Jar::class) {
     archiveFileName.set(project.name)
     archiveClassifier.set("sources")
