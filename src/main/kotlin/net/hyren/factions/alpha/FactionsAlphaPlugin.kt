@@ -4,10 +4,16 @@ import net.hyren.core.shared.CoreProvider
 import net.hyren.core.shared.applications.status.ApplicationStatus
 import net.hyren.core.shared.applications.status.task.ApplicationStatusTask
 import net.hyren.core.shared.scheduler.AsyncScheduler
+import net.hyren.core.spigot.CoreSpigotConstants
 import net.hyren.core.spigot.command.registry.CommandRegistry
+import net.hyren.core.spigot.misc.player.sendPacket
 import net.hyren.core.spigot.misc.plugin.CustomPlugin
+import net.hyren.core.spigot.misc.utils.*
 import net.hyren.factions.alpha.commands.GameModeCommand
+import net.hyren.factions.alpha.misc.player.list.data.PlayerList
+import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo
 import org.bukkit.Bukkit
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer
 import java.util.concurrent.TimeUnit
 
 /**
@@ -33,8 +39,6 @@ class FactionsAlphaPlugin : CustomPlugin() {
          */
 
         Bukkit.getServer().worlds.forEach {
-            it.isAutoSave = false
-
             it.isThundering = false
             it.weatherDuration = 0
 
@@ -86,6 +90,46 @@ class FactionsAlphaPlugin : CustomPlugin() {
             0,
             1,
             TimeUnit.SECONDS
+        )
+
+        /**
+         * Protocol Handler
+         */
+
+        CoreSpigotConstants.PROTOCOL_HANDLER?.registerListener(
+            object : PacketListener() {
+
+                override fun onSent(
+                    event: PacketEvent
+                ) {
+                    val player = event.player
+                    val packet = event.packet
+
+                    if (packet is PacketPlayOutPlayerInfo) {
+                        if (!packet.channels.contains(PlayerList.CHANNEL_NAME)) {
+                            println("Não contém")
+
+                            event.isCancelled = true
+                        } else {
+                            println("Contém")
+
+                            val toRemove = packet.b.stream().filter {
+                                it.a().name == player.name
+                            }.findFirst().orElse(null) ?: return
+
+                            packet.b.remove(toRemove)
+
+                            val newPacket = PacketPlayOutPlayerInfo(
+                                PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER,
+                                (player as CraftPlayer).handle
+                            )
+
+                            player.sendPacket(newPacket)
+                        }
+                    }
+                }
+
+            }
         )
     }
 

@@ -5,7 +5,6 @@ import net.hyren.core.shared.CoreConstants
 import net.hyren.core.shared.misc.utils.*
 import net.hyren.core.spigot.misc.player.sendPacket
 import net.minecraft.server.v1_8_R3.*
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer
 import org.bukkit.entity.Player
 import java.util.*
 
@@ -43,8 +42,6 @@ data class PlayerList(
         index: Int,
         text: String
     ) {
-        val entityPlayer = (player as CraftPlayer).handle
-
         val updatePlayerInfo = PacketPlayOutPlayerInfo()
 
         val updatePlayerInfoData = PacketPlayOutPlayerInfo.PlayerInfoData(
@@ -65,10 +62,6 @@ data class PlayerList(
         updatePlayerInfo.b = PLAYERS
 
         player.sendPacket(updatePlayerInfo)
-
-        val removePlayerInfoPacket = PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, entityPlayer)
-
-        player.sendPacket(removePlayerInfoPacket)
     }
 
 }
