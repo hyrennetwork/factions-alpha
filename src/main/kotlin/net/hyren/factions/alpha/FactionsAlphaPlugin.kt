@@ -4,9 +4,13 @@ import net.hyren.core.shared.CoreProvider
 import net.hyren.core.shared.applications.status.ApplicationStatus
 import net.hyren.core.shared.applications.status.task.ApplicationStatusTask
 import net.hyren.core.shared.scheduler.AsyncScheduler
+import net.hyren.core.spigot.CoreSpigotConstants
 import net.hyren.core.spigot.command.registry.CommandRegistry
 import net.hyren.core.spigot.misc.plugin.CustomPlugin
+import net.hyren.core.spigot.misc.utils.*
 import net.hyren.factions.alpha.commands.GameModeCommand
+import net.hyren.factions.alpha.misc.player.list.data.PlayerList
+import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo
 import org.bukkit.Bukkit
 import java.util.concurrent.TimeUnit
 
@@ -86,6 +90,31 @@ class FactionsAlphaPlugin : CustomPlugin() {
             0,
             1,
             TimeUnit.SECONDS
+        )
+
+        /**
+         * Packet Handler
+         */
+
+        CoreSpigotConstants.PROTOCOL_HANDLER?.registerListener(
+            object : PacketListener() {
+
+                override fun onReceive(
+                    event: PacketEvent
+                ) {
+                    val player = event.player
+                    val packet = event.packet ?: return
+
+                    println("Packet: ${packet::class.qualifiedName}")
+
+                    if (packet is PacketPlayOutPlayerInfo && packet.channels.contains(PlayerList.CHANNEL_NAME)) {
+                        println("OPA aqui sim")
+                    } else if (packet is PacketPlayOutPlayerInfo) {
+                        event.isCancelled = true
+                    }
+                }
+
+            }
         )
     }
 
