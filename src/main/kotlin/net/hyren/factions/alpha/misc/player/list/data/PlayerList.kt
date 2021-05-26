@@ -44,20 +44,6 @@ data class PlayerList(
         text: String
     ) {
         val entityPlayer = (player as CraftPlayer).handle
-        val removePlayerInfoPacket = PacketPlayOutPlayerInfo()
-
-        removePlayerInfoPacket.a = PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER
-
-        removePlayerInfoPacket.b.add(
-            PacketPlayOutPlayerInfo.PlayerInfoData(
-                entityPlayer.profile,
-                0,
-                WorldSettings.EnumGamemode.NOT_SET,
-                ChatComponentText(player.name)
-            )
-        )
-
-        player.sendPacket(removePlayerInfoPacket)
 
         val updatePlayerInfo = PacketPlayOutPlayerInfo()
 
@@ -79,6 +65,10 @@ data class PlayerList(
         updatePlayerInfo.b = PLAYERS
 
         player.sendPacket(updatePlayerInfo)
+
+        val removePlayerInfoPacket = PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, entityPlayer)
+
+        player.sendPacket(removePlayerInfoPacket)
     }
 
 }
