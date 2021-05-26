@@ -68,7 +68,7 @@ data class PlayerList(
 
 internal fun generateRandomColors(): String {
     return buildString {
-        for (i in 0..9) {
+        for (i in 1..9) {
             val code = CoreConstants.RANDOM.nextInt(i).toChar()
 
             append(
