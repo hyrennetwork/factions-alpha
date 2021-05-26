@@ -5,6 +5,7 @@ import net.hyren.core.shared.CoreConstants
 import net.hyren.core.shared.misc.utils.*
 import net.hyren.core.spigot.misc.player.sendPacket
 import net.minecraft.server.v1_8_R3.*
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer
 import org.bukkit.entity.Player
 import java.util.*
 
@@ -42,9 +43,25 @@ data class PlayerList(
         index: Int,
         text: String
     ) {
-        val packet = PacketPlayOutPlayerInfo()
+        val entityPlayer = (player as CraftPlayer).handle
+        val removePlayerInfoPacket = PacketPlayOutPlayerInfo()
 
-        val playerInfoData = PacketPlayOutPlayerInfo.PlayerInfoData(
+        removePlayerInfoPacket.a = PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER
+
+        removePlayerInfoPacket.b.add(
+            PacketPlayOutPlayerInfo.PlayerInfoData(
+                entityPlayer.profile,
+                0,
+                WorldSettings.EnumGamemode.NOT_SET,
+                ChatComponentText(player.name)
+            )
+        )
+
+        player.sendPacket(removePlayerInfoPacket)
+
+        val updatePlayerInfo = PacketPlayOutPlayerInfo()
+
+        val updatePlayerInfoData = PacketPlayOutPlayerInfo.PlayerInfoData(
             GameProfile(
                 UUID.randomUUID(),
                 SEQUENCE_PREFIX.next()
@@ -54,14 +71,14 @@ data class PlayerList(
             ChatComponentText(text)
         )
 
-        PLAYERS[index] = playerInfoData
+        PLAYERS[index] = updatePlayerInfoData
 
-        packet.channels.add(CHANNEL_NAME)
+        updatePlayerInfo.channels.add(CHANNEL_NAME)
 
-        packet.a = PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER
-        packet.b = PLAYERS
+        updatePlayerInfo.a = PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER
+        updatePlayerInfo.b = PLAYERS
 
-        player.sendPacket(packet)
+        player.sendPacket(updatePlayerInfo)
     }
 
 }
@@ -69,10 +86,10 @@ data class PlayerList(
 internal fun generateRandomColors(): String {
     return buildString {
         for (i in 1..9) {
-            val code = CoreConstants.RANDOM.nextInt(i).toChar()
+            val code = CoreConstants.RANDOM.nextInt(i)
 
             append(
-                ChatColor.getByChar(code)
+                ChatColor.COLOR_CHAR + code
             )
         }
     }
