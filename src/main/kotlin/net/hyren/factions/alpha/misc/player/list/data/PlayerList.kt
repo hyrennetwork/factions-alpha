@@ -48,7 +48,7 @@ data class PlayerList(
 
             addPlayerInfoPacket.channels.add(CHANNEL_NAME)
 
-            addPlayerInfoPacket.a = PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME
+            addPlayerInfoPacket.a = PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER
             addPlayerInfoPacket.b = PLAYERS
 
             player.sendPacket(addPlayerInfoPacket)
