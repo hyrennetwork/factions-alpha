@@ -35,17 +35,22 @@ data class PlayerList(
 
     }
 
-    fun init() {
-        for (i in 0..79) {
-            update(i, "§0")
-        }
-    }
-
     fun update(
         index: Int,
         text: String
     ) {
-        val updatePlayerInfo = PacketPlayOutPlayerInfo()
+        /*val removePlayerInfoPacket = PacketPlayOutPlayerInfo()
+
+        removePlayerInfoPacket.channels.add(CHANNEL_NAME)
+
+        removePlayerInfoPacket.a = PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER
+        removePlayerInfoPacket.b = PLAYERS.filter {
+            it.d().text == text
+        }
+
+        player.sendPacket(removePlayerInfoPacket)*/
+
+        val updatePlayerInfoPacket = PacketPlayOutPlayerInfo()
 
         val updatePlayerInfoData = PacketPlayOutPlayerInfo.PlayerInfoData(
             GameProfile(
@@ -59,9 +64,20 @@ data class PlayerList(
 
         PLAYERS[index] = updatePlayerInfoData
 
+        updatePlayerInfoPacket.channels.add(CHANNEL_NAME)
+
+        updatePlayerInfoPacket.a = PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER
+        updatePlayerInfoPacket.b = PLAYERS
+
+        player.sendPacket(updatePlayerInfoPacket)
+    }
+
+    fun reset() {
+        val updatePlayerInfo = PacketPlayOutPlayerInfo()
+
         updatePlayerInfo.channels.add(CHANNEL_NAME)
 
-        updatePlayerInfo.a = PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER
+        updatePlayerInfo.a = PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER
         updatePlayerInfo.b = PLAYERS
 
         player.sendPacket(updatePlayerInfo)
