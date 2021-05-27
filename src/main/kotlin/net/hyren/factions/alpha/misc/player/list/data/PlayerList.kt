@@ -3,6 +3,7 @@ package net.hyren.factions.alpha.misc.player.list.data
 import com.mojang.authlib.GameProfile
 import net.hyren.core.shared.misc.utils.SequencePrefix
 import net.hyren.core.spigot.misc.player.sendPacket
+import net.hyren.factions.alpha.misc.util.HiddenStringUtils
 import net.minecraft.server.v1_8_R3.*
 import org.bukkit.entity.Player
 import java.util.*
@@ -15,6 +16,8 @@ data class PlayerList(
     private val size: Int = 80
 ) {
 
+    private val ALPHABET = ('a'..'z') + ('A'..'Z') + ('0'..'9')
+
     private val SEQUENCE_PREFIX = SequencePrefix()
 
     private val PLAYERS = MutableList(80) {
@@ -25,35 +28,15 @@ data class PlayerList(
             ),
             0,
             WorldSettings.EnumGamemode.NOT_SET,
-            ChatComponentText("§0")
+            ChatComponentText(HiddenStringUtils.encodeString(
+                List(16) { ALPHABET.random() }.joinToString()
+            ))
         )
     }
 
     companion object {
 
         const val CHANNEL_NAME = "hyren_custom_player_list"
-
-        fun getDefaultPacket(): PacketPlayOutPlayerInfo {
-            val sequencePrefix = SequencePrefix()
-            val packet = PacketPlayOutPlayerInfo()
-
-            packet.channels.add(CHANNEL_NAME)
-
-            packet.a = PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER
-            packet.b = MutableList(1000) {
-                PacketPlayOutPlayerInfo.PlayerInfoData(
-                    GameProfile(
-                        UUID.randomUUID(),
-                        "__${sequencePrefix.next()}"
-                    ),
-                    0,
-                    WorldSettings.EnumGamemode.NOT_SET,
-                    ChatComponentText("§0")
-                )
-            }
-
-            return packet
-        }
 
     }
 
