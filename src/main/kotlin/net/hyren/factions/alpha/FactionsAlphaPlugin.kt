@@ -33,6 +33,8 @@ class FactionsAlphaPlugin : CustomPlugin() {
          */
 
         Bukkit.getServer().worlds.forEach {
+            it.isAutoSave = false
+
             it.isThundering = false
             it.weatherDuration = 0
 
