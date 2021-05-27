@@ -105,18 +105,12 @@ class FactionsAlphaPlugin : CustomPlugin() {
 
                     if (packet is PacketPlayOutPlayerInfo) {
                         if (!packet.channels.contains(PlayerList.CHANNEL_NAME)) {
-                            println("Não contém")
-
                             event.isCancelled = true
-                        } else {
-                            println("Contém")
-
+                        }/* else {
                             val toRemove = packet.b.stream().filter {
                                 it.a().name == player.name
                             }.findFirst().orElse(null) ?: return
-
-                            packet.b.remove(toRemove)
-                        }
+                        }*/
                     }
                 }
 
