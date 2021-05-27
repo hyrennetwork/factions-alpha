@@ -37,6 +37,24 @@ data class PlayerList(
 
         const val CHANNEL_NAME = "hyren_custom_player_list"
 
+        fun hideCommonPlayers(player: Player) {
+            Bukkit.getOnlinePlayers().forEach {
+                val entityPlayer = (it as CraftPlayer).handle
+
+                val removePlayerInfoPacket = PacketPlayOutPlayerInfo(
+                    PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER,
+                    entityPlayer
+                )
+
+                player.sendPacket(removePlayerInfoPacket)
+
+                val spawnEntityPacket = PacketPlayOutSpawnEntity(entityPlayer, 0)
+
+                player.sendPacket(spawnEntityPacket)
+                player.sendPacket(removePlayerInfoPacket)
+            }
+        }
+
     }
 
     fun update(
@@ -87,21 +105,7 @@ data class PlayerList(
 
         player.sendPacket(updatePlayerInfoPacket)
 
-        Bukkit.getOnlinePlayers().forEach {
-            val entityPlayer = (it as CraftPlayer).handle
-
-            val removePlayerInfoPacket = PacketPlayOutPlayerInfo(
-                PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER,
-                entityPlayer
-            )
-
-            player.sendPacket(removePlayerInfoPacket)
-
-            val spawnEntityPacket = PacketPlayOutSpawnEntity(entityPlayer, 0)
-
-            player.sendPacket(spawnEntityPacket)
-            player.sendPacket(removePlayerInfoPacket)
-        }
+        hideCommonPlayers(player)
     }
 
 }
