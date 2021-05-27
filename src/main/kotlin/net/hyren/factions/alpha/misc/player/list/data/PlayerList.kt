@@ -39,18 +39,16 @@ data class PlayerList(
         index: Int,
         text: String
     ) {
-        for (i in index..PLAYERS.size) {
-            val removePlayerInfoPacket = PacketPlayOutPlayerInfo()
+        val removePlayerInfoPacket = PacketPlayOutPlayerInfo()
 
-            removePlayerInfoPacket.channels.add(CHANNEL_NAME)
+        removePlayerInfoPacket.channels.add(CHANNEL_NAME)
 
-            removePlayerInfoPacket.a = PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER
-            removePlayerInfoPacket.b = listOf(
-                PLAYERS[i]
-            )
+        removePlayerInfoPacket.a = PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER
+        removePlayerInfoPacket.b = listOf(
+            PLAYERS[index]
+        )
 
-            player.sendPacket(removePlayerInfoPacket)
-        }
+        player.sendPacket(removePlayerInfoPacket)
 
         val updatePlayerInfoPacket = PacketPlayOutPlayerInfo()
 
