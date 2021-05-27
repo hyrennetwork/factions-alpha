@@ -25,7 +25,7 @@ data class PlayerList(
             ),
             0,
             WorldSettings.EnumGamemode.NOT_SET,
-            ChatComponentText("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀")
+            ChatComponentText("§0")
         )
     }
 
