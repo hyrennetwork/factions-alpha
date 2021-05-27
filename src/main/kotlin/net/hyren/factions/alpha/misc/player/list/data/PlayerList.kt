@@ -1,8 +1,7 @@
 package net.hyren.factions.alpha.misc.player.list.data
 
 import com.mojang.authlib.GameProfile
-import net.hyren.core.shared.CoreConstants
-import net.hyren.core.shared.misc.utils.*
+import net.hyren.core.shared.misc.utils.SequencePrefix
 import net.hyren.core.spigot.misc.player.sendPacket
 import net.minecraft.server.v1_8_R3.*
 import org.bukkit.entity.Player
@@ -26,9 +25,7 @@ data class PlayerList(
             ),
             0,
             WorldSettings.EnumGamemode.NOT_SET,
-            ChatComponentText(
-                generateRandomColors()
-            )
+            ChatComponentText("§0")
         )
     }
 
@@ -64,16 +61,4 @@ data class PlayerList(
         player.sendPacket(updatePlayerInfo)
     }
 
-}
-
-internal fun generateRandomColors(): String {
-    return buildString {
-        for (i in 1..9) {
-            val code = CoreConstants.RANDOM.nextInt(i)
-
-            append(
-                ChatColor.COLOR_CHAR + code
-            )
-        }
-    }
 }

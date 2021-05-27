@@ -6,14 +6,12 @@ import net.hyren.core.shared.applications.status.task.ApplicationStatusTask
 import net.hyren.core.shared.scheduler.AsyncScheduler
 import net.hyren.core.spigot.CoreSpigotConstants
 import net.hyren.core.spigot.command.registry.CommandRegistry
-import net.hyren.core.spigot.misc.player.sendPacket
 import net.hyren.core.spigot.misc.plugin.CustomPlugin
 import net.hyren.core.spigot.misc.utils.*
 import net.hyren.factions.alpha.commands.GameModeCommand
 import net.hyren.factions.alpha.misc.player.list.data.PlayerList
 import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo
 import org.bukkit.Bukkit
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer
 import java.util.concurrent.TimeUnit
 
 /**
@@ -118,13 +116,6 @@ class FactionsAlphaPlugin : CustomPlugin() {
                             }.findFirst().orElse(null) ?: return
 
                             packet.b.remove(toRemove)
-
-                            val newPacket = PacketPlayOutPlayerInfo(
-                                PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER,
-                                (player as CraftPlayer).handle
-                            )
-
-                            player.sendPacket(newPacket)
                         }
                     }
                 }
