@@ -54,17 +54,17 @@ data class PlayerList(
             player.sendPacket(addPlayerInfoPacket)
         }
 
-// Remove current lines
-//        val removePlayerInfoPacket = PacketPlayOutPlayerInfo()
-//
-//        removePlayerInfoPacket.channels.add(CHANNEL_NAME)
-//
-//        removePlayerInfoPacket.a = PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER
-//        removePlayerInfoPacket.b = listOf(
-//            PLAYERS[index]
-//        )
-//
-//        player.sendPacket(removePlayerInfoPacket)
+        // Remove current lines
+        val removePlayerInfoPacket = PacketPlayOutPlayerInfo()
+
+        removePlayerInfoPacket.channels.add(CHANNEL_NAME)
+
+        removePlayerInfoPacket.a = PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER
+        removePlayerInfoPacket.b = listOf(
+            PLAYERS[index]
+        )
+
+        player.sendPacket(removePlayerInfoPacket)
 
         val updatePlayerInfoPacket = PacketPlayOutPlayerInfo()
 
@@ -96,14 +96,11 @@ data class PlayerList(
             )
 
             player.sendPacket(removePlayerInfoPacket)
-            it.sendPacket(removePlayerInfoPacket)
 
             val spawnEntityPacket = PacketPlayOutSpawnEntity(entityPlayer, 0)
 
             player.sendPacket(spawnEntityPacket)
-            it.sendPacket(spawnEntityPacket)
             player.sendPacket(removePlayerInfoPacket)
-            it.sendPacket(removePlayerInfoPacket)
         }
     }
 
