@@ -17,6 +17,8 @@ data class PlayerList(
     private val size: Int = 80
 ) {
 
+    private var initialized = false
+
     private val SEQUENCE_PREFIX = SequencePrefix()
 
     private val PLAYERS = MutableList(80) {
@@ -41,7 +43,18 @@ data class PlayerList(
         index: Int,
         text: String
     ) {
-        // Remove current lines
+        if (!initialized) {
+            val addPlayerInfoPacket = PacketPlayOutPlayerInfo()
+
+            addPlayerInfoPacket.channels.add(CHANNEL_NAME)
+
+            addPlayerInfoPacket.a = PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME
+            addPlayerInfoPacket.b = PLAYERS
+
+            player.sendPacket(addPlayerInfoPacket)
+        }
+
+// Remove current lines
 //        val removePlayerInfoPacket = PacketPlayOutPlayerInfo()
 //
 //        removePlayerInfoPacket.channels.add(CHANNEL_NAME)
@@ -83,11 +96,14 @@ data class PlayerList(
             )
 
             player.sendPacket(removePlayerInfoPacket)
+            it.sendPacket(removePlayerInfoPacket)
 
             val spawnEntityPacket = PacketPlayOutSpawnEntity(entityPlayer, 0)
 
             player.sendPacket(spawnEntityPacket)
+            it.sendPacket(spawnEntityPacket)
             player.sendPacket(removePlayerInfoPacket)
+            it.sendPacket(removePlayerInfoPacket)
         }
     }
 
