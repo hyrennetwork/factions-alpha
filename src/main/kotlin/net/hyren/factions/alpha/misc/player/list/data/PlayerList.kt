@@ -35,6 +35,12 @@ data class PlayerList(
 
     }
 
+    fun init() {
+        for (i in 0..79) {
+            update(i, "§0")
+        }
+    }
+
     fun update(
         index: Int,
         text: String
