@@ -15,7 +15,6 @@ data class PlayerList(
     private val size: Int = 80
 ) {
 
-    private val COLOR_CODES = ('a'..'f') + ('0'..'9')
     private val SEQUENCE_PREFIX = SequencePrefix()
 
     private val PLAYERS = MutableList(80) {
@@ -26,11 +25,7 @@ data class PlayerList(
             ),
             0,
             WorldSettings.EnumGamemode.NOT_SET,
-            ChatComponentText(
-                List(16) {
-                    "§${COLOR_CODES.random()}"
-                }.joinToString()
-            )
+            ChatComponentText("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀")
         )
     }
 
