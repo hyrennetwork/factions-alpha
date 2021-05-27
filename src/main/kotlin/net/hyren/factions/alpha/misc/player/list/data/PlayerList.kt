@@ -1,7 +1,6 @@
 package net.hyren.factions.alpha.misc.player.list.data
 
 import com.mojang.authlib.GameProfile
-import net.hyren.core.shared.CoreConstants
 import net.hyren.core.shared.misc.utils.SequencePrefix
 import net.hyren.core.spigot.misc.player.sendPacket
 import net.minecraft.server.v1_8_R3.*
@@ -12,12 +11,11 @@ import java.util.*
  * @author Gutyerrez
  */
 data class PlayerList(
-    val player: Player,
+    private val player: Player,
     private val size: Int = 80
 ) {
 
-    private val ALPHABET = ('a'..'z') + ('A'..'Z') + ('0'..'9')
-
+    private val COLOR_CODES = ('a'..'f') + ('0'..'9')
     private val SEQUENCE_PREFIX = SequencePrefix()
 
     private val PLAYERS = MutableList(80) {
@@ -64,23 +62,11 @@ data class PlayerList(
                 ),
                 0,
                 WorldSettings.EnumGamemode.NOT_SET,
-                ChatComponentText(buildString {
-                    for (z in 0..8) {
-                        var code = CoreConstants.RANDOM.nextInt(if (z == 0) {
-                            1
-                        } else {
-                            z
-                        })
-
-                        if (code < 0) {
-                            code = 0
-                        }
-
-                        append("§$code")
-                    }
-
-                    append("⠀")
-                })
+                ChatComponentText(
+                    List(16) {
+                        "§${COLOR_CODES.random()}"
+                    }.joinToString()
+                )
             )
         }
 
