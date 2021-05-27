@@ -26,7 +26,11 @@ data class PlayerList(
             ),
             0,
             WorldSettings.EnumGamemode.NOT_SET,
-            ChatComponentText("§0")
+            ChatComponentText(
+                List(16) {
+                    "§${COLOR_CODES.random()}"
+                }.joinToString()
+            )
         )
     }
 
@@ -53,22 +57,6 @@ data class PlayerList(
         )
 
         PLAYERS[index] = updatePlayerInfoData
-
-        for (i in index + 1..80) {
-            PLAYERS[index] = PacketPlayOutPlayerInfo.PlayerInfoData(
-                GameProfile(
-                    UUID.randomUUID(),
-                    SEQUENCE_PREFIX.next()
-                ),
-                0,
-                WorldSettings.EnumGamemode.NOT_SET,
-                ChatComponentText(
-                    List(16) {
-                        "§${COLOR_CODES.random()}"
-                    }.joinToString()
-                )
-            )
-        }
 
         updatePlayerInfo.channels.add(CHANNEL_NAME)
 
