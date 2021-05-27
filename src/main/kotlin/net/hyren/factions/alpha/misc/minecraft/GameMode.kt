@@ -6,10 +6,10 @@ import org.bukkit.GameMode
 /**
  * @author Gutyerrez
  */
-internal val SURVIVAL_PATTERN = Regex("G(s|survival)")
-internal val CREATIVE_PATTERN = Regex("G(c|creative|criativo)")
-internal val ADVENTURE_PATTERN = Regex("G(a|ad|adventure|av|aventura)")
-internal val SPECTATOR_PATTERN = Regex("G(spe|spec|spectator|esp|espe|espec|espectador)")
+internal val SURVIVAL_PATTERN = Regex("(s|survival)", RegexOption.IGNORE_CASE)
+internal val CREATIVE_PATTERN = Regex("(c|creative|criativo)", RegexOption.IGNORE_CASE)
+internal val ADVENTURE_PATTERN = Regex("(a|ad|adventure|av|aventura)", RegexOption.IGNORE_CASE)
+internal val SPECTATOR_PATTERN = Regex("(spe|spec|spectator|esp|espe|espec|espectador)", RegexOption.IGNORE_CASE)
 
 fun String.findGameMode(): GameMode? {
     when {

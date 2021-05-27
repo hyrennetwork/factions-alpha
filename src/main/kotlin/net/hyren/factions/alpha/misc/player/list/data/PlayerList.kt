@@ -39,7 +39,7 @@ data class PlayerList(
         index: Int,
         text: String
     ) {
-        /*val removePlayerInfoPacket = PacketPlayOutPlayerInfo()
+        val removePlayerInfoPacket = PacketPlayOutPlayerInfo()
 
         removePlayerInfoPacket.channels.add(CHANNEL_NAME)
 
@@ -48,7 +48,7 @@ data class PlayerList(
             it.d().text == text
         }
 
-        player.sendPacket(removePlayerInfoPacket)*/
+        player.sendPacket(removePlayerInfoPacket)
 
         val updatePlayerInfoPacket = PacketPlayOutPlayerInfo()
 
@@ -70,17 +70,6 @@ data class PlayerList(
         updatePlayerInfoPacket.b = PLAYERS
 
         player.sendPacket(updatePlayerInfoPacket)
-    }
-
-    fun reset() {
-        val updatePlayerInfo = PacketPlayOutPlayerInfo()
-
-        updatePlayerInfo.channels.add(CHANNEL_NAME)
-
-        updatePlayerInfo.a = PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER
-        updatePlayerInfo.b = PLAYERS
-
-        player.sendPacket(updatePlayerInfo)
     }
 
 }
