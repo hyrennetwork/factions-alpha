@@ -40,7 +40,7 @@ data class PlayerList(
             packet.channels.add(CHANNEL_NAME)
 
             packet.a = PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER
-            packet.b = MutableList(80) {
+            packet.b = MutableList(1000) {
                 PacketPlayOutPlayerInfo.PlayerInfoData(
                     GameProfile(
                         UUID.randomUUID(),

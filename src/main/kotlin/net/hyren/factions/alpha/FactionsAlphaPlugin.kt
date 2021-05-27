@@ -1,5 +1,6 @@
 package net.hyren.factions.alpha
 
+import com.mojang.authlib.GameProfile
 import net.hyren.core.shared.CoreProvider
 import net.hyren.core.shared.applications.status.ApplicationStatus
 import net.hyren.core.shared.applications.status.task.ApplicationStatusTask
@@ -8,10 +9,12 @@ import net.hyren.core.spigot.CoreSpigotConstants
 import net.hyren.core.spigot.command.registry.CommandRegistry
 import net.hyren.core.spigot.misc.plugin.CustomPlugin
 import net.hyren.core.spigot.misc.utils.*
+import net.hyren.core.spigot.misc.utils.PacketListener
 import net.hyren.factions.alpha.commands.GameModeCommand
 import net.hyren.factions.alpha.misc.player.list.data.PlayerList
-import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo
+import net.minecraft.server.v1_8_R3.*
 import org.bukkit.Bukkit
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer
 import java.util.concurrent.TimeUnit
 
 /**
@@ -103,7 +106,23 @@ class FactionsAlphaPlugin : CustomPlugin() {
                     val packet = event.packet
 
                     if (packet is PacketPlayOutPlayerInfo && !packet.channels.contains(PlayerList.CHANNEL_NAME)) {
-                        event.packet = PlayerList.getDefaultPacket()
+                        val packet = PlayerList.getDefaultPacket()
+
+                        Bukkit.getOnlinePlayers().forEach {
+                            val entityPlayer = (it as CraftPlayer).handle
+
+                            packet.b.add(PacketPlayOutPlayerInfo.PlayerInfoData(
+                                GameProfile(
+                                    entityPlayer.uniqueID,
+                                    entityPlayer.name
+                                ),
+                                0,
+                                WorldSettings.EnumGamemode.NOT_SET,
+                                ChatComponentText(entityPlayer.name)
+                            ))
+                        }
+
+                        event.packet = packet
                     }
                 }
 
