@@ -4,6 +4,8 @@ import com.mojang.authlib.GameProfile
 import net.hyren.core.shared.misc.utils.SequencePrefix
 import net.hyren.core.spigot.misc.player.sendPacket
 import net.minecraft.server.v1_8_R3.*
+import org.bukkit.Bukkit
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer
 import org.bukkit.entity.Player
 import java.util.*
 
@@ -39,16 +41,17 @@ data class PlayerList(
         index: Int,
         text: String
     ) {
-        val removePlayerInfoPacket = PacketPlayOutPlayerInfo()
-
-        removePlayerInfoPacket.channels.add(CHANNEL_NAME)
-
-        removePlayerInfoPacket.a = PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER
-        removePlayerInfoPacket.b = listOf(
-            PLAYERS[index]
-        )
-
-        player.sendPacket(removePlayerInfoPacket)
+        // Remove current lines
+//        val removePlayerInfoPacket = PacketPlayOutPlayerInfo()
+//
+//        removePlayerInfoPacket.channels.add(CHANNEL_NAME)
+//
+//        removePlayerInfoPacket.a = PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER
+//        removePlayerInfoPacket.b = listOf(
+//            PLAYERS[index]
+//        )
+//
+//        player.sendPacket(removePlayerInfoPacket)
 
         val updatePlayerInfoPacket = PacketPlayOutPlayerInfo()
 
@@ -66,10 +69,26 @@ data class PlayerList(
 
         updatePlayerInfoPacket.channels.add(CHANNEL_NAME)
 
-        updatePlayerInfoPacket.a = PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER
+        updatePlayerInfoPacket.a = PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME
         updatePlayerInfoPacket.b = PLAYERS
 
         player.sendPacket(updatePlayerInfoPacket)
+
+        Bukkit.getOnlinePlayers().forEach {
+            val entityPlayer = (it as CraftPlayer).handle
+
+            val removePlayerInfoPacket = PacketPlayOutPlayerInfo(
+                PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER,
+                entityPlayer
+            )
+
+            player.sendPacket(removePlayerInfoPacket)
+
+            val spawnEntityPacket = PacketPlayOutSpawnEntity(entityPlayer, 0)
+
+            player.sendPacket(spawnEntityPacket)
+            player.sendPacket(removePlayerInfoPacket)
+        }
     }
 
 }
