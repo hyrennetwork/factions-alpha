@@ -11,7 +11,7 @@ import java.util.*
  * @author Gutyerrez
  */
 data class PlayerList(
-    private val player: Player,
+    val player: Player,
     private val size: Int = 80
 ) {
 
@@ -32,6 +32,28 @@ data class PlayerList(
     companion object {
 
         const val CHANNEL_NAME = "hyren_custom_player_list"
+
+        fun getDefaultPacket(): PacketPlayOutPlayerInfo {
+            val sequencePrefix = SequencePrefix()
+            val packet = PacketPlayOutPlayerInfo()
+
+            packet.channels.add(CHANNEL_NAME)
+
+            packet.a = PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER
+            packet.b = MutableList(80) {
+                PacketPlayOutPlayerInfo.PlayerInfoData(
+                    GameProfile(
+                        UUID.randomUUID(),
+                        "__${sequencePrefix.next()}"
+                    ),
+                    0,
+                    WorldSettings.EnumGamemode.NOT_SET,
+                    ChatComponentText("§0")
+                )
+            }
+
+            return packet
+        }
 
     }
 

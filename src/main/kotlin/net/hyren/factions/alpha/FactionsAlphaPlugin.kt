@@ -100,17 +100,10 @@ class FactionsAlphaPlugin : CustomPlugin() {
                 override fun onSent(
                     event: PacketEvent
                 ) {
-                    val player = event.player
                     val packet = event.packet
 
-                    if (packet is PacketPlayOutPlayerInfo) {
-                        if (!packet.channels.contains(PlayerList.CHANNEL_NAME)) {
-                            event.isCancelled = true
-                        }/* else {
-                            val toRemove = packet.b.stream().filter {
-                                it.a().name == player.name
-                            }.findFirst().orElse(null) ?: return
-                        }*/
+                    if (packet is PacketPlayOutPlayerInfo && !packet.channels.contains(PlayerList.CHANNEL_NAME)) {
+                        event.packet = PlayerList.getDefaultPacket()
                     }
                 }
 
