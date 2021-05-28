@@ -15,6 +15,18 @@ import java.util.concurrent.TimeUnit
  */
 class FactionsAlphaPlugin : CustomPlugin() {
 
+    companion object {
+
+        lateinit var instance: CustomPlugin
+
+    }
+
+    init {
+
+        instance = this
+
+    }
+
     private var onlineSince = 0L
 
     override fun onEnable() {

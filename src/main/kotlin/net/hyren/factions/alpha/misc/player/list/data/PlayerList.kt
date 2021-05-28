@@ -3,6 +3,7 @@ package net.hyren.factions.alpha.misc.player.list.data
 import com.mojang.authlib.GameProfile
 import net.hyren.core.shared.misc.utils.SequencePrefix
 import net.hyren.core.spigot.misc.player.sendPacket
+import net.hyren.factions.alpha.FactionsAlphaPlugin
 import net.minecraft.server.v1_8_R3.*
 import org.bukkit.Bukkit
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer
@@ -38,21 +39,26 @@ data class PlayerList(
         const val CHANNEL_NAME = "hyren_custom_player_list"
 
         fun hideCommonPlayers(player: Player) {
-            Bukkit.getOnlinePlayers().forEach {
-                val entityPlayer = (it as CraftPlayer).handle
+            Bukkit.getScheduler().runTask(
+                FactionsAlphaPlugin.instance,
+                {
+                    Bukkit.getOnlinePlayers().forEach {
+                        val entityPlayer = (it as CraftPlayer).handle
 
-                val removePlayerInfoPacket = PacketPlayOutPlayerInfo(
-                    PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER,
-                    entityPlayer
-                )
+                        val removePlayerInfoPacket = PacketPlayOutPlayerInfo(
+                            PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER,
+                            entityPlayer
+                        )
 
-                player.sendPacket(removePlayerInfoPacket)
+                        player.sendPacket(removePlayerInfoPacket)
 
-                val spawnEntityPacket = PacketPlayOutSpawnEntity(entityPlayer, 0)
+                        val spawnEntityPacket = PacketPlayOutSpawnEntity(entityPlayer, 0)
 
-                player.sendPacket(spawnEntityPacket)
-                player.sendPacket(removePlayerInfoPacket)
-            }
+                        player.sendPacket(spawnEntityPacket)
+                        player.sendPacket(removePlayerInfoPacket)
+                    }
+                }
+            )
         }
 
     }
@@ -61,6 +67,8 @@ data class PlayerList(
         index: Int,
         text: String
     ) {
+        hideCommonPlayers(player)
+
         if (!initialized) {
             val addPlayerInfoPacket = PacketPlayOutPlayerInfo()
 
@@ -104,8 +112,6 @@ data class PlayerList(
         updatePlayerInfoPacket.b = PLAYERS
 
         player.sendPacket(updatePlayerInfoPacket)
-
-        hideCommonPlayers(player)
     }
 
 }
