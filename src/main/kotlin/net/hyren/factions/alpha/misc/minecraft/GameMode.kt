@@ -24,10 +24,10 @@ fun String.findGameMode(): GameMode? {
                 })]
             }
         }
-        this.matches(SURVIVAL_PATTERN) -> GameMode.SURVIVAL
-        this.matches(CREATIVE_PATTERN) -> GameMode.CREATIVE
-        this.matches(ADVENTURE_PATTERN) -> GameMode.ADVENTURE
-        this.matches(SPECTATOR_PATTERN) -> GameMode.SPECTATOR
+        SURVIVAL_PATTERN.matches(this) -> GameMode.SURVIVAL
+        CREATIVE_PATTERN.matches(this) -> GameMode.CREATIVE
+        ADVENTURE_PATTERN.matches(this) -> GameMode.ADVENTURE
+        SPECTATOR_PATTERN.matches(this) -> GameMode.SPECTATOR
     }
 
     return null
