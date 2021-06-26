@@ -24,8 +24,8 @@ dependencies {
     // kotlin
     compileOnly(kotlin("stdlib"))
 
-    // paperspigot
-    compileOnly("org.github.paperspigot:paperspigot:1.8.8-R0.1-SNAPSHOT")
+    // paer-spigot-server
+    compileOnly("org.github.paperspigot:paper-spigot-server:1.8.8-R0.1-SNAPSHOT")
 
     //exposed
     compileOnly("org.jetbrains.exposed:exposed-dao:0.31.1")
