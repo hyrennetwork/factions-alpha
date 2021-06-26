@@ -1,8 +1,6 @@
 plugins {
     kotlin("jvm") version "1.5.10"
 
-    id("com.github.johnrengelman.shadow") version "6.1.0"
-
     `maven-publish`
 }
 
@@ -42,7 +40,7 @@ tasks {
         }
     }
 
-    shadowJar {
+    jar {
         archiveFileName.set("${project.name}.jar")
     }
 }
